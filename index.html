@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>神秘解密游戏</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <!-- 开始界面 -->
+        <div class="screen active" id="startScreen">
+            <div class="particles" id="particles"></div>
+            <div class="start-content">
+                <div class="glitch-wrapper">
+                    <h1 class="glitch" data-text="解密档案">解密档案</h1>
+                </div>
+                <p class="subtitle">机密文件 #HSY-108</p>
+                <div class="classified-stamp">TOP SECRET</div>
+                <p class="intro-text">一份关于某人的绝密档案被加密封存<br>你能揭开真相吗？</p>
+                <button class="btn-start" onclick="startGame()">
+                    <span>开始解密</span>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- 第一关：数字密码 -->
+        <div class="screen" id="level1">
+            <div class="level-header">
+                <span class="level-tag">LEVEL 01</span>
+                <h2>数字密码</h2>
+            </div>
+            <div class="level-content">
+                <div class="cipher-display">
+                    <div class="cipher-box">
+                        <span class="cipher-hint">🔢</span>
+                        <p class="cipher-text">"此数为三位，百位是一，十位是零，个位是八。<br>也是梁山好汉的数量。"</p>
+                    </div>
+                </div>
+                <div class="input-area">
+                    <div class="code-inputs" id="codeInputs1">
+                        <input type="text" maxlength="1" class="code-digit" data-index="0">
+                        <input type="text" maxlength="1" class="code-digit" data-index="1">
+                        <input type="text" maxlength="1" class="code-digit" data-index="2">
+                    </div>
+                    <p class="hint-text" id="hint1">提示：水浒传中有多少位好汉？</p>
+                </div>
+                <button class="btn-submit" onclick="checkLevel1()">验证密码</button>
+                <div class="result-message" id="result1"></div>
+            </div>
+        </div>
+
+        <!-- 第二关：文字解密 -->
+        <div class="screen" id="level2">
+            <div class="level-header">
+                <span class="level-tag">LEVEL 02</span>
+                <h2>字符重组</h2>
+            </div>
+            <div class="level-content">
+                <div class="cipher-display">
+                    <div class="cipher-box">
+                        <span class="cipher-hint">🔤</span>
+                        <p class="cipher-text">"将下面的字重新排列，<br>组成一个人的名字："</p>
+                        <div class="scrambled-chars" id="scrambledChars">
+                            <span class="char-tile" data-char="怡">怡</span>
+                            <span class="char-tile" data-char="黄">黄</span>
+                            <span class="char-tile" data-char="诗">诗</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="input-area">
+                    <div class="drop-zone" id="dropZone">
+                        <div class="drop-slot" data-slot="0"></div>
+                        <div class="drop-slot" data-slot="1"></div>
+                        <div class="drop-slot" data-slot="2"></div>
+                    </div>
+                    <p class="hint-text">拖动文字到正确位置</p>
+                </div>
+                <button class="btn-submit" onclick="checkLevel2()">验证答案</button>
+                <div class="result-message" id="result2"></div>
+            </div>
+        </div>
+
+        <!-- 第三关：图案密码 -->
+        <div class="screen" id="level3">
+            <div class="level-header">
+                <span class="level-tag">LEVEL 03</span>
+                <h2>身份识别</h2>
+            </div>
+            <div class="level-content">
+                <div class="cipher-display">
+                    <div class="cipher-box">
+                        <span class="cipher-hint">🧬</span>
+                        <p class="cipher-text">"根据DNA分析，此人的生物特征为："</p>
+                        <div class="dna-display">
+                            <div class="dna-strand">
+                                <span>🐷</span><span>🐷</span><span>🐷</span>
+                            </div>
+                        </div>
+                        <p class="cipher-subtext">请输入此生物的名称（一个字）</p>
+                    </div>
+                </div>
+                <div class="input-area">
+                    <input type="text" class="single-input" id="level3Input" maxlength="1" placeholder="?">
+                    <p class="hint-text">这是什么动物？</p>
+                </div>
+                <button class="btn-submit" onclick="checkLevel3()">确认身份</button>
+                <div class="result-message" id="result3"></div>
+            </div>
+        </div>
+
+        <!-- 第四关：最终谜题 -->
+        <div class="screen" id="level4">
+            <div class="level-header">
+                <span class="level-tag">FINAL LEVEL</span>
+                <h2>真相揭示</h2>
+            </div>
+            <div class="level-content">
+                <div class="cipher-display">
+                    <div class="cipher-box final-cipher">
+                        <span class="cipher-hint">🔐</span>
+                        <p class="cipher-text">"整合所有线索，完成这个等式："</p>
+                        <div class="equation">
+                            <span class="eq-part name-part">黄诗怡</span>
+                            <span class="eq-part">=</span>
+                            <span class="eq-part animal-part">?</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="input-area">
+                    <div class="final-options" id="finalOptions">
+                        <button class="option-btn" data-answer="猫">🐱 猫</button>
+                        <button class="option-btn" data-answer="狗">🐶 狗</button>
+                        <button class="option-btn" data-answer="猪">🐷 猪</button>
+                        <button class="option-btn" data-answer="兔">🐰 兔</button>
+                    </div>
+                </div>
+                <div class="result-message" id="result4"></div>
+            </div>
+        </div>
+
+        <!-- 通关界面 -->
+        <div class="screen" id="endScreen">
+            <div class="confetti" id="confetti"></div>
+            <div class="end-content">
+                <div class="trophy">🏆</div>
+                <h1 class="congrats">解密成功！</h1>
+                <div class="file-reveal">
+                    <div class="file-header">
+                        <span>📁 机密档案 #HSY-108</span>
+                        <span class="declassified">已解密</span>
+                    </div>
+                    <div class="file-content">
+                        <div class="file-row">
+                            <span class="label">姓名：</span>
+                            <span class="value">黄诗怡</span>
+                        </div>
+                        <div class="file-row">
+                            <span class="label">代号：</span>
+                            <span class="value">108</span>
+                        </div>
+                        <div class="file-row">
+                            <span class="label">真实身份：</span>
+                            <span class="value highlight">猪 🐷</span>
+                        </div>
+                        <div class="file-row conclusion">
+                            <span class="big-text">黄诗怡是猪！</span>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn-restart" onclick="restartGame()">再玩一次</button>
+            </div>
+        </div>
+
+        <!-- 进度指示器 -->
+        <div class="progress-bar" id="progressBar">
+            <div class="progress-dot active" data-level="1">1</div>
+            <div class="progress-line"></div>
+            <div class="progress-dot" data-level="2">2</div>
+            <div class="progress-line"></div>
+            <div class="progress-dot" data-level="3">3</div>
+            <div class="progress-line"></div>
+            <div class="progress-dot" data-level="4">4</div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
